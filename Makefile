@@ -43,7 +43,7 @@ all: manager
 
 # Run tests
 ENVTEST_ASSETS_DIR=$(shell pwd)/testbin
-test: generate fmt vet envtest manifests api-docs bundle-kustomization
+test: generate fmt vet envtest manifests api-docs
 	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) -p path)" go test ./... -coverprofile cover.out
 
 ENVTEST = $(shell pwd)/bin/setup-envtest

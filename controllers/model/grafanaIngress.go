@@ -3,7 +3,7 @@ package model
 import (
 	"github.com/grafana-operator/grafana-operator/v4/api/integreatly/v1alpha1"
 	"github.com/grafana-operator/grafana-operator/v4/controllers/constants"
-	netv1 "k8s.io/api/networking/v1"
+	netv1 "k8s.io/api/networking/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -53,36 +53,6 @@ func getIngressSpec(cr *v1alpha1.Grafana) netv1.IngressSpec {
 	}
 	port := GetIngressTargetPort(cr)
 
-	if port.IntVal != 0 {
-		return netv1.IngressSpec{
-			TLS:              getIngressTLS(cr),
-			IngressClassName: GetIngressClassName(cr),
-			Rules: []netv1.IngressRule{
-				{
-					Host: GetHost(cr),
-					IngressRuleValue: netv1.IngressRuleValue{
-						HTTP: &netv1.HTTPIngressRuleValue{
-							Paths: []netv1.HTTPIngressPath{
-								{
-									Path:     GetPath(cr),
-									PathType: GetIngressPathType(cr),
-									Backend: netv1.IngressBackend{
-										Service: &netv1.IngressServiceBackend{
-											Name: serviceName(cr),
-											Port: netv1.ServiceBackendPort{
-												Number: port.IntVal,
-											},
-										},
-										Resource: nil,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		}
-	}
 	return netv1.IngressSpec{
 		TLS:              getIngressTLS(cr),
 		IngressClassName: GetIngressClassName(cr),
@@ -96,13 +66,9 @@ func getIngressSpec(cr *v1alpha1.Grafana) netv1.IngressSpec {
 								Path:     GetPath(cr),
 								PathType: GetIngressPathType(cr),
 								Backend: netv1.IngressBackend{
-									Service: &netv1.IngressServiceBackend{
-										Name: serviceName(cr),
-										Port: netv1.ServiceBackendPort{
-											Name: port.StrVal,
-										},
-									},
-									Resource: nil,
+									ServiceName: serviceName(cr),
+									ServicePort: port,
+									Resource:    nil,
 								},
 							},
 						},

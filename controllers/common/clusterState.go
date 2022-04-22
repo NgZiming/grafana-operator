@@ -9,7 +9,7 @@ import (
 	v12 "github.com/openshift/api/route/v1"
 	v13 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
-	netv1 "k8s.io/api/networking/v1"
+	netv1 "k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
